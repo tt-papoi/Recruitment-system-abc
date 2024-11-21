@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise Portal - Tuyển dụng ABC</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 150px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            color: inherit;
+            text-decoration: inherit;
+        }
+
+        .logo .highlight {
+            color: #006F18;
+            text-decoration: inherit;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .buttons .btn {
+            font-size: 16px;
+            padding: 10px 20px;
+            border: 2px solid #006F18;
+            background-color: white;
+            color: #006F18;
+            cursor: pointer;
+            border-radius: 5px;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+
+        .buttons .btn.logout {
+            background-color: #006F18;
+            color: white;
+        }
+
+        .main-content {
+            display: flex;
+            margin-top: 10px;
+            padding: 20px;
+            width: 80%;
+        }
+
+        .sidebar {
+            width: 200px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-right: 20px;
+        }
+
+        .sidebar .menu {
+            padding: 10px 0;
+        }
+
+        .sidebar .menu h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #303030;
+            text-align: center;
+        }
+
+        .sidebar .menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sidebar .menu ul li {
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+
+        .sidebar .menu ul li a {
+            text-decoration: none;
+            color: #006F18;
+            font-size: 16px;
+            display: block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .sidebar .menu ul li a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .sidebar .menu ul li a.active {
+            background-color: #006F18;
+            color: white;
+        }
+
+        .sidebar .sub-menu {
+            padding-left: 20px;
+            display: none;
+        }
+
+        .content {
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start; /* Align items to the left */
+            text-align: center;
+        }
+
+        .content .create-job {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .content .create-job .job-title {
+            display: flex;
+            align-items: center;
+        }
+
+        .content .create-job .job-title p {
+            font-size: 18px;
+            color: #303030;
+            font-weight: bold;
+            margin: 0; /* Remove margin to prevent space */
+        }
+
+        .content .create-job button {
+            font-size: 16px;
+            padding: 10px 20px;
+            border: 2px solid #006F18;
+            background-color: #006F18;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .content .create-job button:hover {
+            background-color: #005F14;
+        }
+
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .content table th,
+        .content table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .content table th {
+            background-color: #f2f2f2;
+            color: #303030;
+            font-weight: bold;
+        }
+
+        .content table td {
+            color: #606060;
+        }
+
+        .content table tbody tr:hover {
+            background-color: #f0f0f0;
+            cursor: pointer;
+        }
+
+        footer {
+            width: 100%;
+            background-color: #006F18;
+            padding: 20px 0;
+            text-align: center;
+            color: white;
+            margin-top: auto;
+        }
+
+        .member-alert {
+            background-color: #006F18;
+            color: #333;
+            padding: 15px;
+            border: 1px solid #6ecc82;
+            border-radius: 5px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .member-alert strong {
+            font-size: 18px;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            /* Responsive adjustments */
+            header {
+                padding: 15px 20px;
+            }
+            .main-content {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .sidebar {
+                width: 100%;
+                margin: 0;
+                margin-bottom: 20px;
+            }
+            .content {
+                width: 100%;
+                padding: 10px;
+                overflow-x: auto; /* Scroll horizontally if table overflows */
+            }
+            .content table {
+                width: 100%;
+                table-layout: fixed;
+            }
+            .content table th,
+            .content table td {
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <a class="logo" th:href="@{/}">Tuyển dụng <span class="highlight">ABC</span></a>
+    <div class="buttons">
+        <a th:href="@{/logout}">
+            <button class="btn logout">Đăng xuất</button>
+        </a>
+    </div>
+</header>
+<main class="main-content" th:object="${enterprise}">
+    <div class="sidebar">
+        <div class="menu">
+            <ul>
+                <li><a th:if="*{status} == 'MEMBER'" href="#" onclick="toggleSubMenu(event, 'recruitmentSubMenu')">Tin tuyển dụng</a>
+                    <div class="sub-menu" id="recruitmentSubMenu" th:if="*{status} == 'MEMBER'">
+                        <ul>
+                            <li><a th:href="@{/enterprise/recruitment/posted}" id="postedTab">Đã đăng tuyển</a></li>
+                            <li><a th:href="@{/enterprise/recruitment/pending-approval}" id="pendingApprovalTab">Chờ xét duyệt</a></li>
+                            <li><a th:href="@{/enterprise/recruitment/disapproval}" id="disapprovalTab">Bị từ chối</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a th:if="*{status} == 'MEMBER'" href="#" onclick="toggleSubMenu(event, 'paymentSubMenu')">Thanh toán</a>
+                    <div class="sub-menu" id="paymentSubMenu" th:if="*{status} == 'MEMBER'">
+                        <ul>
+                            <li><a th:href="@{/enterprise/recruitment/pending-paid}" id="pendingPaidTab">Chờ thanh toán</a></li>
+                            <li><a th:href="@{/enterprise/invoice}" id="invoiceTab">Hoá đơn</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <li><a th:if="*{status} == 'MEMBER'" href="#">Hồ sơ ứng viên</a></li>
+                <li><a href="#">Thông báo</a></li>
+                <li><a href="#">Tài khoản</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <div th:if="*{status} == 'MEMBER'" class="create-job">
+            <div class="job-title">
+                <p>Tin chờ xét duyệt</p>
+            </div>
+            <form th:action="@{/enterprise/recruitment/create}" method="get" class="job-button">
+                <button type="submit">Tạo tin tuyển dụng</button>
+            </form>
+        </div>
+        <table th:if="*{status} == 'MEMBER'">
+            <thead>
+            <tr>
+                <th>Vị trí tuyển dụng</th>
+                <th>Ngày bắt đầu</th>
+                <th>Ngày kết thúc</th>
+                <th>Số lượng ứng viên</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="recruitment, index : ${pendingApprovalRecruitment}">
+                <td th:text="${recruitment.appliedPosition}"></td>
+                <td th:text="${#temporals.format(recruitment.startDate, 'dd-MM-yyyy')}"></td>
+                <td th:text="${#temporals.format(recruitment.endDate, 'dd-MM-yyyy')}"></td>
+                <td th:text="${recruitment.numberCandidates}"></td>
+                <td><a th:href="@{/enterprise/recruitment/pending-approval/details(id=${recruitment.id})}">Chi tiết</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:if="*{status} == 'NON_MEMBER'" class="member-alert">
+            <strong th:text="'Đang chờ xác nhận đăng ký thành viên'"></strong>
+        </div>
+        <div th:if="*{status} == 'DISAPPROVAL'" class="member-alert">
+            <strong th:text="'Yêu cầu đăng ký thành viên bị từ chối'"></strong>
+            <strong th:text="'Vui lòng cập nhật thông tin chính xác'"></strong>
+        </div>
+    </div>
+</main>
+<footer>
+    <p>© 2024 Tuyển dụng ABC. All rights reserved.</p>
+</footer>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    function toggleSubMenu(event, subMenuId) {
+        const subMenu = document.getElementById(subMenuId);
+        const approvalTab = event.target.closest('li');
+
+        // Toggle visibility of sub-menu
+        if (subMenu.style.display === 'block') {
+            subMenu.style.display = 'none';
+            approvalTab.classList.remove('active'); // Remove active class when hiding sub-menu
+        } else {
+            subMenu.style.display = 'block';
+            approvalTab.classList.add('active'); // Add active class when showing sub-menu
+        }
+    }
+
+    // add events for sidebar
+    const menuItems = document.querySelectorAll('.sidebar .menu ul li a');
+    menuItems.forEach(item => {
+        item.addEventListener('click', function() {
+            // Remove the previously active class of all links
+            menuItems.forEach(link => link.classList.remove('active'));
+            // To add the active class to the clicked link
+            this.classList.add('active');
+        });
+    });
+
+    // Set "Đã đăng tuyển" tab active on page load
+    window.addEventListener('load', () => {
+        document.getElementById('pendingApprovalTab').classList.add('active');
+        document.getElementById('recruitmentSubMenu').style.display = 'block'; // Ensure the sub-menu is visible
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
